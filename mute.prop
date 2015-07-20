@@ -1,0 +1,18 @@
+{
+  "modules" : { 
+    "mute":     {
+      "description": "Mute Sarah",
+      "version"    : "1.0",
+	  "increasedThreashold" : 2,
+	  "defaultThreashold" : 0.82,
+	  "maxThreashold" : 0.92,
+	  "asknext" : 45,
+	  "askend" : 5,
+	  "tempo" : 10,
+	  "forceMute" : 1,
+	  "ignoreCmds" : {"mute" : "setDefaultThreashold,setmaxThreashold,getThreashold,updateThreashold"
+					},
+	  "ignoreOptions" : "confidence,profile,directory,body,_cmd,tts,client,sun,temp,place"
+    }
+  }
+}

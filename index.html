@@ -1,0 +1,313 @@
+<div id="tvSchedule">
+  
+  <div class="row-fluid">
+     <div class="span8">
+	 
+		   <p>
+           Développé pour Sarah V 3.1.6 (NON COMPATIBLE V4. Pas encore essayé)<br>
+		   Version 1.0 - 10/06/2015<br>
+		   Author: Stéphane Bascher<br>
+		  </p>
+          <p>
+          <h3>Sarah s'il te plait !</h3>
+		   <ul>
+			   <li>Dites les commandes en les enchainant sans devoir dire "Sarah".</li>
+			   <li>Auto mute après un timeout prédéfini.</li>
+			   <li>Niveau de confidence auto-incrémentable.</li>
+			   <li>Peut couper le son des périphériques que vous souhaitez pendant un dialogue.</li>
+			   <li>Gère les règles standards, les lazy et le askme.</li>
+			 </ul>
+          </p>
+		
+		 <h3>Ok pour ces conditions:</h3>
+		 Supprimer le 1er mot de la confidence ("Sarah ou ce que vous voulez") donne plus de faux positifs que le laisser.<br>
+		 Pour cette raison:
+		 <ul>
+		  <li>Il est obligatoire de définir une grammaire minimaliste par un mode lazy et d'activer les grammaires de plugins à la demande.</li>
+		  <li>Pour éviter de réactiver systématiquement le mode "mute", la grammaire minimaliste doit se réactiver automatiquement après un temps donné sans dialogue.</li>
+		  <li>Pour améliorer la compréhension, il est aussi souhaitable de couper le son des périphériques pendant le dialogue.</li>
+		  <li>Il ne faut pas oublier la gestion de la réinitialisation du moteur de règles qui sort des modes lazy (propriété "ctxTimeout" du custom.ini, exprimée en milli-secondes).</li>
+		 </ul>
+		 
+		 <h3>Comment ce truc fonctionne ?</h3>
+		 A l'initialisation du plugin, la grammaire lazymute.xml est activé.<br>
+		 La règle "Sarah s'il te plait" active les grammaires de plugins et déclenche un timer.<br>
+		 Lorsqu'une règle est vocalisée, le timer se réinitialise à chaque fois, ainsi tant que vous parlez, il n'est plus nécessaire de dire "Sarah".<br>
+		 Lorsque vous arrêtez, le timer arrive à terme et réactive le lazymute.xml automatiquement.<br><br>
+		 
+		 Le plugin gère aussi les modes lazy. A l'initialisation d'un lazy, le timer courant est arrêté et est réactivé lorsque vous en sortez.<br>
+		 De même, la fonction askme est gérée. un timer gère le mode en boucle du askme, un autre gère la temporisation lorsque vous en sortez.<br><br>
+		 
+		 Comme les faux positifs existent toujours (eh oui, ne rêvez pas), le plugin est prévu pour augmenter automatiquement sa confidence si le timer se déclenche alors qu'aucune règle n'est activée.<br>
+		 Après un temps d'adaptation, elle se stabilisera d'elle-même. Vous pourrez alors connaitre la meilleure confidence en relation avec l'environnement du moment.<br>
+		 Vous pouvez même penser à ajouter des règles dans le lazymute.xml pour modifier la confidence directement. Par exemple:<br>
+		 'Sarah je vais écouter de la musique' -> confidence à 0.91<br>
+		 Voyez l'exemple dans le lazymute.xml<br>
+		 <b>Important:</b> La règle "Sarah s'il te plait" se comporte correctement chez moi et donne très peu de faux positifs (sinon aucun) avec une confidence assez faible, MAIS, ce qui est correct chez moi ne l'est peut-être pas chez vous.<br>
+		 Si vous constatez un trop grand nombre de faux, ne laisser pas la confidence monter d'une façon trop importante seule sinon Sarah vous entendra difficilement. N'hésitez donc pas à modifier cette règle par une règle plus contraignante afin de trouver un bon compromis.<br><br>
+		 
+		  <h3>Les commandes ?</h3>
+		 
+		 Les commande du lazymute.xml:<br> 
+		 <b>Sarah s'il te plait</b> <br>
+		 Charge les grammaires de plugins <br>
+		 <b>Sarah met la confidence maximum</b> <br>
+		 Incrémente la confidence à la valeur définie dans la propriété 'maxThreashold' (0.92 par défaut)<br> 
+		 <b>Sarah monte la confidence</b> <br>
+		 Incrémente la confidence de 0.01<br> 
+		 <b>Sarah baisse la confidence</b> <br>
+		 Réduit la confidence de 0.01<br> 
+		 b>Sarah reviens à la confidence par défaut</b> <br>
+		 Reset la confidence à la valeur définie dans la propriété 'defaultThreashold' (0.82 par défaut)<br> 
+		 <b>Sarah quel est ton niveau de confidence</b> <br>
+		 Sarah vous donne le niveau de confidence courant du "lazymute.xml".<br>
+		 <br>
+		 Les commande du mute.xml:<br> 
+		 Chargées avec les grammaires courantes. <br>
+		 <b>je t'ai rien demandé</b> <br>
+		 <b>non rien</b> <br>
+		 <b>merci Sarah</b> <br>
+		Utilisez ces règles si il y a un faux positif ou pour recharger rapidement le lazymute.xml (propriété 'forceMute')<br>
+		Reset le compteur de faux positifs si vous utilisez ces règles.<br> 
+		 <b>Sarah quel est ton niveau de confidence</b> <br>
+		 Sarah vous donne le niveau de confidence courant du "mute.xml".<br><br>
+		 
+		 <h3>Et si on installait ça correctement ?</h3>
+		 Commençons par le fichier mute.prop et ses propriétés.<br>
+		 Il y a 4 propriétés de "timer" exprimées en secondes qui définissent les temporisations avant la réactivation du lazymute.xml.<br>
+		 <b>La propriété tempo:</b> 
+		  <ul>
+			 <li>Définit la temporisation générale pour les grammaires de plugins (par défaut 10 secondes).</li>
+			 <li>A chaque règle, cette temporisation est remise à 0.</li>
+			 <li> Il est déconseillé de définir une trop grande temporisation, n'oubliez pas les faux positifs, ils ne disparaissent pas, d'autant plus que le mot "Sarah" aura disparu !</li>
+		  </ul>
+		 <b>La propriété asknext:</b> 
+		  <ul>
+			<li>Définit la temporisation pour la fonction askme lorsqu'elle s'enchaine (par défaut 45 secondes).</li>
+			<li>Tant qu'on ne sort pas du mode askme, cette temporisation est remise à 0 à chaque règle de askme.</li>
+		  </ul>
+		 <b>La propriété askend:</b> 
+		  <ul>
+			<li>Définit la temporisation pour la fonction askme quand la fonction se termine (par défaut 5 secondes).</li>
+			<li>Activée lorsqu'on sort du askme (Y compris sans règle).</li>
+		 </ul>
+		<b>La propriété forceMute:</b> 
+		 <ul>
+			<li>Définit la temporisation de réactivation rapide du lazymute.xml (par défaut 2 secondes).</li>
+			<li>Activée par les règles du mute.xml.</li>
+		 </ul>	<br>
+		 Les valeurs définies dans le fichier mute.prop ont été affinées par une utilisation régulière mais vous pouvez les changer à votre convenance. Par exemple si chez vous, Sarah parle pendant de longs moments, il est peut-être nécessaire d'augmenter la valeur de la propriété "tempo" qui est par défaut de 10 secondes.<br>
+		 
+		 
+		 <br><br>Ce plugin se prête bien à un diagramme de ce qui a été expliqué juste au-dessus:
+		 
+		  <div class="span4"><img src="/assets/mute/images/MuteDiagram.jpg" align="center" /></div>
+		 
+		 
+		 <br><br>
+		 <h4>Les autres propriétés du fichier mute.prop:</h4>
+		 <br>
+		 <b>La propriété ignoreCmds:</b> <br>
+		 Cette propriété est un tableau d'objets <b>"clé"</b>:<b>"Valeur"</b> regroupant les plugins avec leurs actions et qui doivent être ignorés.<br>
+		Utile lorsque vous avez des actions de plugin qui sont déclenchées automatiquement par un cron ou par une box domotique.<br>
+		Comme nous ne verrons aussi au chapitre suivant, toutes les actions sont capturées par le plugin, y compris celles qui sont exécutées en tâche de fond. Il est donc nécessaire de les ignorer sous peine de voir le plugin les interpréter et de réactiver les grammaires de plugin.<br><br>
+		
+		La <b>"clé"</b> est le nom d'un plugin, la <b>"Valeur"</b> sont les actions (ou les règles, bien qu'une action peut ne pas avoir de règle) du plugin qui doivent être ignorées, séparées par des virgules.<br>
+		Vous avez un exemple avec le plugin "mute" et ses actions qui ne doivent pas déclencher le chargement des grammaires.<br>
+		Autre valeur possible pour la "clé" : "ALL" <br>
+		 <ul>
+			<li>"ALL" définit des "Valeurs" d'actions à ignorer pour TOUS les plugins.</li>
+		 </ul>
+		Par exemple, supposons que l'action (la règle, la fonction js) qui gère le son d'un plugin "freebox" et qui sera utilisée pour couper et remettre le son s'appelle "autoMute", cette action ne peut pas activer les grammaires bien sûr, elle doit donc être ignorée.<br>
+		Il faudra donc créer un objet dans la propriété ignoreCmds sous la forme:<br>
+						<ul>
+							<li> "freebox" : "autoMute",</li>
+						</ul>
+		De même, si toutes les actions qui gèrent le son dans chaque plugin s'appellent "autoMute", vous pouvez entrer:<br>
+						 <ul>
+							<li> "ALL" : "autoMute",</li>
+						</ul>
+		
+		A l'inverse, si toutes les actions d'un plugin doivent être ignorées, vous pouvez entrer "ALL" dans la "Valeur":<br>
+						<ul>
+							<li> "mute" : "ALL",</li>
+						</ul>
+				
+		Autre valeur possible pour la "Valeur" : "null" <br>
+		Certains plugins n'ont pas d'action(s) à appeler explicitement mais doivent quand même être ignorés. Mettez "null" comme valeur si le cas se présente. <br> <br>
+		Exemple (bien que non approprié): 
+						<ul>
+							<li> "time" : "null",</li>
+						</ul>
+		<b>La propriété defaultThreashold:</b> <br>
+		Cette propriété est la confidence par défaut qui devra être utilisée par le plugin pour réinitialiser la confidence.
+		Défini par défaut à 0.82<br>
+		Mettez une valeur en relation avec votre environnement.<br><br>
+		
+		<b>La propriété maxThreashold:</b> <br>
+		Cette propriété est la confidence maximale qui peut être définie pour la confidence.
+		Définie par défaut à 0.92<br>
+		Faite attention en modifiant cette valeur, il me semble que 0.92 est une valeur maximale haute, Sarah ne réagit pas très bien avec une valeur supérieure.<br><br>
+		
+		<b>Les autres propriétés non expliquées:</b> <br>
+		Aucune modification requise.
+		<br><br>
+		
+		<h3>Le cron et la propriété ctxTimeout</h3>
+		Un cron est utilisé pour annuler la réinitialisation automatique du moteur de règles par la propriété "ctxTimeout" du custom.ini.<br>
+		Par défaut, réglé à 13 heures et 30 secondes après l'activation du lazymute.xml (46830s = 13h00mm30s)<br><br>
+		Modifiez la valeur de la propriété "ctxTimeout" du custom.ini pour que celle-ci fasse un reset de la grammaire treize heures après (en milli-secondes).<br>
+		Ouvrez le custom.ini du client et entrez la valeur suivante:<br>
+		ctxTimeout=46800000<br><br>
+		
+		
+		 <h3>Modification des fichiers</h3>
+		 Franchement, vous pensiez juste l'installer et que ça fonctionne sans rien faire, juste "comme çà" ? :-D<br>
+		 Non, pour capturer les actions et les règles des grammaires, il est nécessaire de modifier légèrement le core de Sarah.<br>
+		 Il y a 2 fichiers de Sarah à modifier:
+			<ul>
+				<li> Le fichier "&#139;SARAH&#155;/script/manager/sarah.js"</li>
+				<li> Le fichier "&#139;SARAH&#155;/script/manager/script.js"</li>
+			</ul>
+		
+		<br>
+		<b>Je vous conseille de faire une sauvegarde de tous les fichiers qui vont être modifiés à partir de maintenant. Fichiers xml compris.</b> <br>
+		De cette façon, si le changement ne vous convient pas, vous pourrez revenir en arrière.<br><br>
+		
+		<b>Le ficher script.js</b> <br>
+		Ouvrez le fichier dans un éditeur de texte et chercher la fonction "run", elle doit ressembler à ceci: <br>
+		
+		<div class="span4"><img src="/assets/mute/images/script_ori.jpg" align="center" /></div><br>
+		
+		Ajouter la ligne suivante<br>
+		SARAH.call('mute', {command : 'autoMute', values : {Cmd: cmd, Options: options}});<br>
+		comme ceci: <br>
+		
+		<div class="span4"><img src="/assets/mute/images/script_new.jpg" align="center" /></div><br>
+		
+		Sauvegardez le fichier.<br><br>
+		
+		<b>Le ficher sarah.js</b> <br>
+		Cette étape est à faire si vous avez des appels de 'askme' dans vos plugins. <br>
+		Si vous n'en avez pas, vous pouvez passer à l'étape suivante 'Que reste t'il à faire ?'.<br><br>
+		Ouvrez le fichier dans un éditeur de texte et chercher la fonction "end", elle doit resembler à ceci: <br>
+		 
+		<div class="span4"><img src="/assets/mute/images/sarah_end_ori.jpg" align="center" /></div><br> 
+		
+		Ajouter le paramètre timeout et les lignes suivantes<br>
+		if (!timeout) timeout = false;<br>
+		SARAH.call('mute', {command : 'autoMute', values : {Cmd: 'askme', Options: {timeout: timeout}}});<br>
+		comme ceci: <br>
+		
+		<div class="span4"><img src="/assets/mute/images/sarah_end_new.jpg" align="center" /></div><br><br>
+		
+		Chercher ensuite la fonction "askme", elle doit ressembler à ceci:<br>
+		<div class="span4"><img src="/assets/mute/images/sarah_askme_ori.jpg" align="center" /></div><br>
+		
+		Ajouter la ligne suivante<br>
+		SARAH.call('mute', {command : 'autoMute', values : {Cmd: 'askme', Options: {timeout: true}}});<br>
+		comme ceci: <br>
+		
+		<div class="span4"><img src="/assets/mute/images/sarah_askme_new.jpg" align="center" /></div><br>
+		
+		Sauvegardez le fichier.<br><br>
+		 
+		 <h3>Que reste t'il à faire ?</h3>
+		<b>Modifier l'appel des lazy et context par défaut</b> <br>
+		<ul>
+				<li>L'appel d'un chargement de grammaire d'un lazy doit être signifié au plugin mute en ajoutant un attribut dans la règle.</li>
+					<ul>
+						<li>Pour tous les appels de lazy, il convient d'ajouter l'attribut suivant dans la règle:</li>
+						<li>out.action.lazy="LazyStart"</li>
+					</ul>	
+				<li>Le retour au context par défaut dans un lazy ne peut plus être utilisé.</li>
+					<ul>
+						<li>l'attribut out.action._attributes.context="default" doit être remplacé par:</li>
+						<li>out.action.lazy="LazyStop"</li>
+					</ul>
+		</ul>
+		<br>
+		Par exemple, j'ai un plugin freebox qui à une règle qui déclenche un "lazyzapete.xml"<br>
+		<div class="span4"><img src="/assets/mute/images/lazystart.jpg" align="center" /></div>
+		Je la modifie comme ci-dessous:
+		<div class="span4"><img src="/assets/mute/images/lazystart_new.jpg" align="center" /></div><br>
+		
+		Dans le mode lazy, le retour au context par défaut doit être modifié.<br>
+		Dans le "lazyzapete.xml, la ligne de retour au context par défaut "Merci Sarah, c'est tout".<br>
+		<div class="span4"><img src="/assets/mute/images/lazystop.jpg" align="center" /></div>
+		Je la modifie comme ci-dessous:
+		<div class="span4"><img src="/assets/mute/images/lazystop_new.jpg" align="center" /></div><br><br>
+		
+		<b>Supprimer "Sarah" de toutes les règles</b> <br>
+		Enlevez toutes les règles 
+		<div class="span4"><img src="/assets/mute/images/item_sarah.jpg" align="center"/></div>
+		qui sont définies dans tous les fichiers xml de tous les plugins.<br><br><br>
+		 
+		<b>Modifier les appels de askme</b> <br>
+		Cette étape est à faire si vous avez des appels de 'askme' dans vos plugins. <br>
+		Si vous n'en avez pas, vous pouvez passer à l'étape suivante 'la fonction de coupure du son'.<br><br>
+		
+		Un petit travail est nécessaire afin de dire au plugin mute qu'il y a un appel de askme.<br>
+		De même, lorsque le askme se termine, il faut aussi le dire au plugin mute.<br><br>
+		
+		Pour l'appel du askme, il y a 2 possibilités:
+			<ul>
+				<li>Un trigger</li>
+				SARAH.trigger('mute',{key:'askme'});
+				<li>Un SARAH.call</li>
+				SARAH.call('mute', {command : 'autoMute', values : {Cmd: 'askme', Options: {timeout: false}}});
+			</ul>
+		
+		On préfèrera le trigger lorsqu'il y a un appel de askme simple.<br>
+		On utilisera le SARAH.call lorsqu'il y a un appel de askme plus compliqué avec des fonctions de callback dans tous les sens...<br><br>
+		
+		Par exemple, j'ai une fonction askme très simple qui n'est pas dans une fonction récursive, j'utiliserai donc un trigger comme ci-dessous:<br>
+		<div class="span4"><img src="/assets/mute/images/askme_trigger.jpg" align="center"/></div><br>
+		
+		Autre exemple, j'ai une fonction récursive dans laquelle il y a un askme qui me dirige vers une autre fonction avec un askme et qui est récursive et/ou me fait revenir vers le 1er askme... etc...<br>
+		On ne peut pas mettre un trigger devant chaque askme sinon les appels vont se télescoper.<br>
+		J'utiliserais donc un SARAH.call placé dans la fonction qui appelle tous ces askme récursifs.<br>
+		<div class="span4"><img src="/assets/mute/images/askme_sarahcall.jpg" align="center"/></div><br><br>
+		
+		Pour terminer, il faut aussi signifier que le askme se termine.<br>
+		Dans chaque appel de la fonction askme, la fonction de callback reçoit une fonction 'end()' en paramètre.<br>
+		Cette fonction end() est toujours à passer pour terminer le askme.<br>
+		
+		Afin de faire savoir au plugin Mute que le askme est terminé, il faut modifier la fonction end() par end(true) là où c'est nécessaire.<br>
+		Par exemple, dans la règle 'Merci Sarah' qui termine le askme.<br>
+		Pour toutes les autres règles qui ne terminent pas le askme, laissez la fonction end() normale.<br><br>
+		
+		Un petit exemple d'un de mes plugins qui me donne les programmes de télévision.<br>
+		J'ai délibérément simplifié la fonction.<br>
+		2 règles 'yes' et 'cancel' terminent le askme, la 3ème 'Sommaire' boucle et ne termine pas le askme.<br><br>
+		<div class="span4"><img src="/assets/mute/images/askme_call.jpg" align="center"/></div><br><br>
+		
+		<h3>La fonction de coupure du son</h3>
+		Le mute.js vous propose une fonction 'mngSound(state)' dans laquelle vous pouvez mettre vos appels de coupure de son pour vos plugins.<br>
+		Je ne peux malheureusement pas vous faire ces fonctions, il convient de les créer vous-même.<br>
+		Bien sûr, vous n'êtes pas obligé de couper le son, le plugin fonctionne sans mais c'est un plus non négligeable.<br>
+		
+		L'argument 'state' de la fonction reçoit un boolean (true ou false) à passer à vos plugins:<br>
+		<ul>
+			<li>true</li>
+			Le son doit être coupé.
+			<li>false</li>
+			Le son est remis.
+		</ul>
+		
+		Prenons un exemple, j'ai un plugin 'freebox' et un plugin 'sonosPlayer' pour lesquels j'ai créé des fonctions de coupure du son lorsque je discute avec sarah.
+		<div class="span4"><img src="/assets/mute/images/mngSound.jpg" align="center"/></div><br><br>
+		
+		Ensuite dans chaque plugin, il convient de faire une petite fonction de coupure du son.<br>
+		Par exemple, pour mon plugin 'sonosPlayer':
+		<div class="span4"><img src="/assets/mute/images/AutoMuteSonos.jpg" align="center"/></div><br>
+		
+		Pour mon plugin 'freebox':
+		<div class="span4"><img src="/assets/mute/images/AutoMuteFreebox.jpg" align="center"/></div><br><br>
+		
+		 <br><br><br><br><br><br>
+	</div>
+     
+  </div> 
+  
+</div>

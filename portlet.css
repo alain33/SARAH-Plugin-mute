@@ -1,0 +1,12 @@
+
+.plugin-gridster.mute .front {
+  background: #FFFFFF url('images/mute.jpg') center 30px;
+  background-size:   180px 100px;
+  background-repeat: no-repeat;
+}
+
+
+.plugin-gridster.mute .back {
+  background: #FFFFFF;
+}
+

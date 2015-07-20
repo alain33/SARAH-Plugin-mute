@@ -1,0 +1,19 @@
+<grammar version="1.0" xml:lang="fr-FR" mode="voice" root="ruleMute" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+  
+  <rule id="ruleMute" scope="public">
+    <example>je t'ai rien demandé</example>
+    
+	<tag>out.action=new Object();</tag>
+ 
+  
+	<one-of>
+		<item>je t'ai rien demandé<tag>out.action.command="forceMute";out.action._attributes.tts="Pardon"</tag></item>
+		<item>non rien<tag>out.action.command="forceMute";out.action._attributes.tts="pas d'soucis"</tag></item>
+		<item>merci Sarah<tag>out.action.command="forceMute";out.action._attributes.tts="Je t'en pris"</tag></item>
+		<item>quel est ton niveau de confidence<tag>out.action._attributes.tts="75"</tag></item>
+	</one-of>
+	
+	 <tag>out.action._attributes.threashold="0.75";out.action._attributes.uri="http://127.0.0.1:8080/sarah/mute"</tag>
+ 
+  </rule>
+</grammar>

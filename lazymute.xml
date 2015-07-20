@@ -1,0 +1,30 @@
+<grammar version="1.0" xml:lang="fr-FR" mode="voice" root="ruleLazymute" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+  <rule id="ruleLazymute" scope="public">
+    <example>Sarah s'il te plait</example>
+    <tag>out.action=new Object();</tag>
+   
+   <item>sarah</item>
+	<one-of>
+	   <item>s'il te plait<tag>out.action.command="defaultcontext";out.action._attributes.tts="Oui ?"</tag></item> 
+	   <item>ma petite poulette<tag>out.action.command="defaultcontext";out.action._attributes.tts="oui mon petit père ?"</tag></item>
+	   
+	    <!-- confidence maxThreashold  -->
+	   <item>met la confidence maximum<tag>out.action.command="setmaxThreashold";out.action._attributes.tts="reçu"</tag></item>
+	   
+	   <!-- confidence defaultThreashold -->
+	   <item>reviens à la confidence par défaut<tag>out.action.command="setDefaultThreashold";out.action._attributes.tts="reçu"</tag></item>
+	   
+	   <!-- Augmentation de la confidence par palier de 0.01 -->
+	   <item>augmente la confidence<tag>out.action.command="updateThreashold"</tag></item>
+	  
+	   <!-- Juste pour voir qu'il est possible de donner directement une confidence par un attribut value -->
+	   <item>je vais écouter de la musique<tag>out.action.command="updateThreashold";out.action.value="0.91";out.action._attributes.tts="Ok soeur"</tag></item>
+	   
+	   <!-- Oui c'est vrai ca, c'est quoi ?  -->
+	   <item>quel est ton niveau de confidence<tag>out.action.command="getThreashold"</tag></item>
+	</one-of>
+	
+    <tag>out.action._attributes.threashold="0.83";out.action._attributes.uri="http://127.0.0.1:8080/sarah/mute"</tag> 
+  
+  </rule> 
+</grammar>
