@@ -10,15 +10,15 @@
 
 // Global variables
 var SARAH,
-	v_mute = true,
+    v_mute = true,
 	volmute = false,
-    job,
+	job,
 	cron,
-    flagActiveLazy = false,
+	flagActiveLazy = false,
 	speaktobirds = 0,
-    CronJob = require('./lib/cron/cron').CronJob,
+	CronJob = require('./lib/cron/cron').CronJob,
 	fs = require('fs'),
-    _ = require('./lib/underscore/underscore');
+	_ = require('./lib/underscore/underscore');
 
 // Init Sarah	 
 exports.init = function(sarah){
@@ -55,7 +55,7 @@ exports.action = function(data, callback, config, SARAH){
 		startAskme: function() {autoMute(data.values)},
 		setmaxThreashold: function() {set_threashold('maxThreashold')},
 		forceMute: function() {v_mute = true},
-		updateThreashold: function() {update_threashold(data.value || '')},
+		updateThreashold: function() {update_threashold(data.value || '', data.operate || '')},
 		getThreashold: function() {get_threashold()},
 		setDefaultThreashold: function() {set_threashold('defaultThreashold')}
 	};
@@ -249,7 +249,7 @@ var setjob = function (tempo,value,increasedThreashold) {
 	job = new CronJob(d, function(done) {	
 		console.log("info: speaktobirds: " + speaktobirds + ' maximum: ' + increasedThreashold)
 		if (value.Options['command'] && value.Options['command'] == 'defaultcontext' && speaktobirds  >= increasedThreashold) {	
-			update_threashold(null,function() {  
+			update_threashold(null,null,function() {  
 				setTimeout(function(){ 
 					setlazymute();
 				}, 1000);
@@ -300,7 +300,7 @@ var get_threashold = function () {
 
 
 // Mise à jour de la confidence dans le lazymute.xml
-var update_threashold = function (defaultvalue, callback) {
+var update_threashold = function (defaultvalue, operate, callback) {
 
 	// rewrite XML mute
 	var file = __dirname + '/lazymute.xml';
@@ -308,23 +308,28 @@ var update_threashold = function (defaultvalue, callback) {
 
 	if (XmlMute.indexOf('out.action._attributes.threashold="') != -1) {
 		var threashold;
-		if (defaultvalue && defaultvalue != '')
+		if (defaultvalue && defaultvalue != '') {
+			if (defaultvalue.toString().indexOf('.') != -1)
+				defaultvalue = defaultvalue.toString().split('.')[1];
 			threashold = defaultvalue;
-		else {
-			threashold =  parseFloat(XmlMute.substring(XmlMute.indexOf('out.action._attributes.threashold="') + ('out.action._attributes.threashold=').length + 1, XmlMute.indexOf('out.action._attributes.threashold="') + ('out.action._attributes.threashold=').length + 1 + 4))
-			if (threashold != NaN) 
-				threashold += 0.01;
-			else	
+		} else {
+			threashold = parseInt(XmlMute.substring(XmlMute.indexOf('out.action._attributes.threashold="') + ('out.action._attributes.threashold=').length + 3, XmlMute.indexOf('out.action._attributes.threashold="') + ('out.action._attributes.threashold=').length + 1 + 4))
+			if (threashold != NaN) {
+				if (!operate || operate == null || operate == '+')
+					threashold += 1;
+				else
+					threashold -= 1;
+			} else	
 				console.log("info: enable to update the threashold");
 		}
 		
 		var replaceXml =   XmlMute.substring(0,XmlMute.indexOf('out.action._attributes.threashold="') + ('out.action._attributes.threashold=').length + 1)
-						  + threashold
+						  + '0.' + threashold
 						  + XmlMute.substring(XmlMute.indexOf('out.action._attributes.threashold="') + ('out.action._attributes.threashold=').length + 5);
 		
 		fs.writeFileSync(file, replaceXml, 'utf8');
 
-		SARAH.speak("Je met ma confidence à " + (threashold * 100));
+		SARAH.speak("Je met ma confidence à " + threashold);
 		console.log("info: Update threashold to " + threashold);
 		
 		if (callback) callback();

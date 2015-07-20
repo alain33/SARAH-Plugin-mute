@@ -15,7 +15,9 @@
 	   <item>reviens à la confidence par défaut<tag>out.action.command="setDefaultThreashold";out.action._attributes.tts="reçu"</tag></item>
 	   
 	   <!-- Augmentation de la confidence par palier de 0.01 -->
-	   <item>augmente la confidence<tag>out.action.command="updateThreashold"</tag></item>
+	   <item>monte la confidence<tag>out.action.command="updateThreashold"</tag></item>
+	   <!-- Baisse la confidence par palier de 0.01, attribut operate '-' -->
+	   <item>baisse la confidence<tag>out.action.command="updateThreashold";out.action.operate="-"</tag></item>
 	  
 	   <!-- Juste pour voir qu'il est possible de donner directement une confidence par un attribut value -->
 	   <item>je vais écouter de la musique<tag>out.action.command="updateThreashold";out.action.value="0.91";out.action._attributes.tts="Ok soeur"</tag></item>
@@ -24,7 +26,7 @@
 	   <item>quel est ton niveau de confidence<tag>out.action.command="getThreashold"</tag></item>
 	</one-of>
 	
-    <tag>out.action._attributes.threashold="0.83";out.action._attributes.uri="http://127.0.0.1:8080/sarah/mute"</tag> 
+    <tag>out.action._attributes.threashold="0.82";out.action._attributes.uri="http://127.0.0.1:8080/sarah/mute"</tag> 
   
   </rule> 
 </grammar>
