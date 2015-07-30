@@ -29,3 +29,12 @@ Sarah s'il te plait !
 
 Téléchargez le plug-in et suivez la documentation  
    
+   
+## Versions
+Version 1.1 - 30/07/2015
+- Ajout d'une règle 'stop le mode silence' pour arrêter la remise automatique du mode silence (Pour le plugin 'scenariz')
+- Meilleur contrôle des plugins et règles à ignorer.
+- Règles dans le lazyMute.xml déplacées dans le mute.xml pour diminuer les faux.
+
+Version 1.0 - 10/06/2015
+- Version Released

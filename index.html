@@ -1,12 +1,21 @@
-<div id="tvSchedule">
+<div id="mute">
   
   <div class="row-fluid">
      <div class="span8">
 	 
 		   <p>
            Développé pour Sarah V 3.1.6 (NON COMPATIBLE V4. Pas encore essayé)<br>
-		   Version 1.0 - 10/06/2015<br>
 		   Author: Stéphane Bascher<br>
+		   Version 1.1 - 30/07/2015<br>
+		   <ul>
+				<li>Ajout d'une règle 'stop le mode silence' pour arrêter la remise automatique du mode silence (Pour le plugin 'scenariz')</li>
+				<li>Meilleur contrôle des plugins et règles à ignorer.</li>
+				<li>Règles dans le lazyMute.xml déplacées dans le mute.xml pour diminuer les faux.</li>
+		   </ul>	
+		   Version 1.0 - 10/06/2015<br>
+			<ul>
+			   <li>Version Released</li>
+			</ul>	
 		  </p>
           <p>
           <h3>Sarah s'il te plait !</h3>
@@ -51,14 +60,6 @@
 		 Les commande du lazymute.xml:<br> 
 		 <b>Sarah s'il te plait</b> <br>
 		 Charge les grammaires de plugins <br>
-		 <b>Sarah met la confidence maximum</b> <br>
-		 Incrémente la confidence à la valeur définie dans la propriété 'maxThreashold' (0.92 par défaut)<br> 
-		 <b>Sarah monte la confidence</b> <br>
-		 Incrémente la confidence de 0.01<br> 
-		 <b>Sarah baisse la confidence</b> <br>
-		 Réduit la confidence de 0.01<br> 
-		 <b>Sarah reviens à la confidence par défaut</b> <br>
-		 Reset la confidence à la valeur définie dans la propriété 'defaultThreashold' (0.82 par défaut)<br> 
 		 <b>Sarah quel est ton niveau de confidence</b> <br>
 		 Sarah vous donne le niveau de confidence courant du "lazymute.xml".<br>
 		 <br>
@@ -69,8 +70,20 @@
 		 <b>merci Sarah</b> <br>
 		Utilisez ces règles si il y a un faux positif ou pour recharger rapidement le lazymute.xml (propriété 'forceMute')<br>
 		Reset le compteur de faux positifs si vous utilisez ces règles.<br> 
-		 <b>Sarah quel est ton niveau de confidence</b> <br>
-		 Sarah vous donne le niveau de confidence courant du "mute.xml".<br><br>
+		 <b>quel est ton niveau de confidence</b> <br>
+		 Sarah vous donne le niveau de confidence courant du "mute.xml".<br>
+		 <b>met la confidence maximum</b> <br>
+		 Incrémente la confidence à la valeur définie dans la propriété 'maxThreashold' (0.92 par défaut)<br> 
+		 <b>monte la confidence</b> <br>
+		 Incrémente la confidence de 0.01<br> 
+		 <b>baisse la confidence</b> <br>
+		 Réduit la confidence de 0.01<br> 
+		 <b>reviens à la confidence par défaut</b> <br>
+		 Reset la confidence à la valeur définie dans la propriété 'defaultThreashold' (0.82 par défaut)<br> 
+		 <b>stop le mode silence</b> <br>
+		 Arrête tous les timers de reset du mode silence.<br>
+		 Doit être utilisé avec prudence. Utile lorsque vous avez un plugin qui nécessite une très longue période de silence ou qui n'est pas très adapté à une remise automatique de ce mode.<br>
+		 <b>A savoir:</b> le 'askme' n'est pas impacté par cette règle, si un askme est utilisé, celui-ci reactivera le mode silence (propriétés 'asknext' ou 'askend' du mute.prop).<br><br>
 		 
 		 <h3>Et si on installait ça correctement ?</h3>
 		 Commençons par le fichier mute.prop et ses propriétés.<br>
@@ -93,7 +106,7 @@
 		 </ul>
 		<b>La propriété forceMute:</b> 
 		 <ul>
-			<li>Définit la temporisation de réactivation rapide du lazymute.xml (par défaut 2 secondes).</li>
+			<li>Définit la temporisation de réactivation rapide du lazymute.xml (par défaut 1 secondes).</li>
 			<li>Activée par les règles du mute.xml.</li>
 		 </ul>	<br>
 		 Les valeurs définies dans le fichier mute.prop ont été affinées par une utilisation régulière mais vous pouvez les changer à votre convenance. Par exemple si chez vous, Sarah parle pendant de longs moments, il est peut-être nécessaire d'augmenter la valeur de la propriété "tempo" qui est par défaut de 10 secondes.<br>

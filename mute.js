@@ -55,6 +55,7 @@ exports.action = function(data, callback, config, SARAH){
 		startAskme: function() {autoMute(data.values)},
 		setmaxThreashold: function() {set_threashold('maxThreashold')},
 		forceMute: function() {v_mute = true},
+		stopMute: function() {v_mute = false},
 		updateThreashold: function() {update_threashold(data.value || '', data.operate || '')},
 		getThreashold: function() {get_threashold()},
 		setDefaultThreashold: function() {set_threashold('defaultThreashold')}
@@ -73,9 +74,8 @@ exports.action = function(data, callback, config, SARAH){
 // state true = coupe le son
 // state false = remet le son
 var mngSound = function (state) {
-	// Démo
-	// SARAH.call('freebox', {command: 'autoMute', key: state});
-	// SARAH.call('SonosPlayer', {command: 'autoMute', key: state});
+	SARAH.call('freebox', {command: 'autoMute', key: state});
+	SARAH.call('SonosPlayer', {command: 'autoMute', key: state});
 }
 
 
@@ -134,21 +134,30 @@ var ignoreCmd = function (value,callback) {
 			console.log("info: force mute");
 			return callback(false,true);
 		}
+		
+		if (value.Options['command'] && value.Options['command'] == 'stopMute' ) {
+			console.log("info: stop mute");
+			return callback(true);
+		}
 
 		if (tblIgnoreCmds[value.Cmd] || tblIgnoreCmds['ALL']) {
+			if (tblIgnoreCmds[value.Cmd]) 
+				var evenCmd = tblIgnoreCmds[value.Cmd].split(',');
+			if (tblIgnoreCmds['ALL'])
+				var evenALL = tblIgnoreCmds['ALL'].split(',');
+		
 			for (var key in value.Options) {
-				if (tblIgnoreCmds[value.Cmd] && tblIgnoreCmds[value.Cmd].indexOf(value.Options[key]) != -1) {
-					return callback(true);
-				}
-				if (tblIgnoreCmds['ALL'] && tblIgnoreCmds['ALL'].length > 0) {
-					if (tblIgnoreCmds['ALL'].indexOf(value.Options[key]) != -1)
-						return callback(true);
-				} 
+				if ( _.contains(evenCmd, value.Options[key]) == true)
+					return callback();
+
+				if ( _.contains(evenALL, value.Options[key]) == true)
+					return callback();
 			}
 			var Options = {},
-				pending = Object.keys(value.Options).length;
+				pending = Object.keys(value.Options).length,
+				evenStdOptions = tblIgnoreStdOptions.split(',');
 			for (var key in value.Options) {
-				if (tblIgnoreStdOptions.indexOf(key) == -1) {
+				if ( _.contains(evenStdOptions, value.Options[key]) == false) {
 					Options[key] = value.Options[key];
 				}
 			

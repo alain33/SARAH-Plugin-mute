@@ -10,6 +10,23 @@
 		<item>je t'ai rien demandé<tag>out.action.command="forceMute";out.action._attributes.tts="Pardon"</tag></item>
 		<item>non rien<tag>out.action.command="forceMute";out.action._attributes.tts="pas d'soucis"</tag></item>
 		<item>merci Sarah<tag>out.action.command="forceMute";out.action._attributes.tts="Je t'en pris"</tag></item>
+		
+		  <!-- confidence maxThreashold  -->
+	   <item>met la confidence maximum<tag>out.action.command="setmaxThreashold";out.action._attributes.tts="reçu"</tag></item>
+	   <!-- confidence defaultThreashold -->
+	   <item>reviens à la confidence par défaut<tag>out.action.command="setDefaultThreashold";out.action._attributes.tts="reçu"</tag></item>	   
+	   <!-- Augmentation de la confidence par palier de 0.01 -->
+	   <item>monte la confidence<tag>out.action.command="updateThreashold"</tag></item>
+	   <!-- Baisse la confidence par palier de 0.01, attribut operate '-' -->
+	   <item>baisse la confidence<tag>out.action.command="updateThreashold";out.action.operate="-"</tag></item>
+	   
+	   <item>stop le mode silence<tag>out.action.command="stopMute";out.action._attributes.tts="compris"</tag></item>
+		
+	   
+	   <!-- Juste pour voir qu'il est possible de donner directement une confidence par un attribut value -->
+	   <item>je vais écouter de la musique<tag>out.action.command="updateThreashold";out.action.value="0.91";out.action._attributes.tts="Ok soeur"</tag></item>
+	   
+		
 		<item>quel est ton niveau de confidence<tag>out.action._attributes.tts="75"</tag></item>
 	</one-of>
 	
