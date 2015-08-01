@@ -157,7 +157,7 @@ var ignoreCmd = function (value,callback) {
 				pending = Object.keys(value.Options).length,
 				evenStdOptions = tblIgnoreStdOptions.split(',');
 			for (var key in value.Options) {
-				if ( _.contains(evenStdOptions, value.Options[key]) == false) {
+				if ( _.contains(evenStdOptions, key) == false) {
 					Options[key] = value.Options[key];
 				}
 			
