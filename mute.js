@@ -74,8 +74,8 @@ exports.action = function(data, callback, config, SARAH){
 // state true = coupe le son
 // state false = remet le son
 var mngSound = function (state) {
-	SARAH.call('freebox', {command: 'autoMute', key: state});
-	SARAH.call('SonosPlayer', {command: 'autoMute', key: state});
+	//SARAH.call('freebox', {command: 'autoMute', key: state});
+	//SARAH.call('SonosPlayer', {command: 'autoMute', key: state});
 }
 
 
