@@ -2,15 +2,21 @@
   "modules" : { 
     "mute":     {
       "description": "Mute Sarah",
-      "version"    : "1.1",
+      "version"    : "1.2",
+	  "level_micro" : 59000,
+	  "set_micro" : "false",
 	  "increasedThreashold" : 2,
-	  "defaultThreashold" : 0.82,
+	  "defaultThreashold" : 0.79,
 	  "maxThreashold" : 0.92,
 	  "asknext" : 45,
 	  "askend" : 5,
 	  "tempo" : 10,
 	  "forceMute" : 1,
-	  "ignoreCmds" : {"mute" : "setDefaultThreashold,setmaxThreashold,getThreashold,updateThreashold"
+	  "ignoreCmds" : {"mute" : "setDefaultThreashold,setmaxThreashold,getThreashold,updateThreashold",
+					  "ALL" : "setRoom",
+					  "eeDomus" : "motionAlarm,autoSwitchOff",
+					  "freebox" : "autoMute,null",
+					  "SonosPlayer" : "autoMute,null"
 					},
 	  "ignoreOptions" : "confidence,profile,directory,body,_cmd,tts,client,sun,temp,place"
     }

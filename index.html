@@ -5,8 +5,13 @@
 	 
 		   <p>
            Développé pour Sarah V 3.1.6 (NON COMPATIBLE V4. Pas encore essayé)<br>
-		   Author: Stéphane Bascher<br>
-		   Version 1.1 - 30/07/2015<br>
+		   Author: Stéphane Bascher<br><br>
+		   
+		   Version 1.2 - 26/09/2015
+		   <ul>
+				<li>Ajout du réajustement automatique du niveau du micro. Utile si une application positionne automatiquement le niveau du micro et créait des problèmes de compréhension.</li>
+		   </ul>	
+		  Version 1.1 - 30/07/2015<br>
 		   <ul>
 				<li>Ajout d'une règle 'stop le mode silence' pour arrêter la remise automatique du mode silence (Pour le plugin 'scenariz')</li>
 				<li>Meilleur contrôle des plugins et règles à ignorer.</li>
@@ -24,6 +29,7 @@
 			   <li>Auto mute après un timeout prédéfini.</li>
 			   <li>Niveau de confidence auto-incrémentable.</li>
 			   <li>Peut couper le son des périphériques que vous souhaitez pendant un dialogue.</li>
+			    <li>Peut réajuster automatiquement le niveau de micro.</li>
 			   <li>Gère les règles standards, les lazy et le askme.</li>
 			 </ul>
           </p>
@@ -162,6 +168,15 @@
 		Définie par défaut à 0.92<br>
 		Faite attention en modifiant cette valeur, il me semble que 0.92 est une valeur maximale haute, Sarah ne réagit pas très bien avec une valeur supérieure.<br><br>
 		
+		<b>La propriété set_micro</b> <br>
+		Certains micros ou application(s) reset le niveau de micro automatiquement, ce qui peut poser quelques problèmes de compréhension.<br>
+		Pour que le niveau du micro soit automatiquement repositionné à une valeur définie avec la valeur de la propriété 'level_micro', positionnez la propriété à 'true' sinon mettez 'false'<br><br>
+		
+		<b>La propriété level_micro</b> <br>
+		Défini la valeur du niveau du micro.<br>
+		Entrez une valeur comprise entre 1 et 65000.<br>
+		Par exemple, une valeur de 59000 définie un niveau de 90%.<br><br>
+		
 		<b>Les autres propriétés non expliquées:</b> <br>
 		Aucune modification requise.
 		<br><br>
@@ -172,7 +187,6 @@
 		Modifiez la valeur de la propriété "ctxTimeout" du custom.ini pour que celle-ci fasse un reset de la grammaire treize heures après (en milli-secondes).<br>
 		Ouvrez le custom.ini du client et entrez la valeur suivante:<br>
 		ctxTimeout=46800000<br><br>
-		
 		
 		 <h3>Modification des fichiers</h3>
 		 Franchement, vous pensiez juste l'installer et que ça fonctionne sans rien faire, juste "comme çà" ? :-D<br>

@@ -18,6 +18,7 @@ var SARAH,
 	speaktobirds = 0,
 	CronJob = require('./lib/cron/cron').CronJob,
 	fs = require('fs'),
+	exec = require('child_process').exec,
 	_ = require('./lib/underscore/underscore');
 
 // Init Sarah	 
@@ -74,8 +75,24 @@ exports.action = function(data, callback, config, SARAH){
 // state true = coupe le son
 // state false = remet le son
 var mngSound = function (state) {
-	//SARAH.call('freebox', {command: 'autoMute', key: state});
-	//SARAH.call('SonosPlayer', {command: 'autoMute', key: state});
+	// SARAH.call('freebox', {command: 'autoMute', key: state});
+	// SARAH.call('SonosPlayer', {command: 'autoMute', key: state});
+}
+
+
+var resetVolume = function () {
+	
+	var config = SARAH.ConfigManager.getConfig();
+	if (config.modules.mute['set_micro'] == 'true') {
+		var value = config.modules.mute['level_micro'].toString();
+		var process = '%CD%/plugins/mute/lib/nircmd/nircmd.exe setsysvolume ' + value + ' "default_record"';
+		exec(process, function (error, stdout, stderr) {
+			if (error || stderr) 
+				console.log("info: Reset volume error:" + error);
+			else
+				console.log("iInfo: Reset volume to "  + value);
+		});
+	}
 }
 
 
@@ -84,6 +101,7 @@ var mngSound = function (state) {
 // chargement de toutes les grammaires
 var setDefaultContext = function (){
 	
+	resetVolume();
 	// Je coupe le son
 	mngSound(true);
 	SARAH.remote({'context' : 'default'});

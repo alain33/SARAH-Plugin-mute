@@ -22,6 +22,7 @@ Sarah s'il te plait !
 - Auto mute après un timeout prédéfini.
 - Niveau de confidence auto-incrémentable.
 - Peut couper le son des périphériques que vous souhaitez pendant un dialogue.
+- Peut réajuster automatiquement le niveau de micro.</li>
 - Gère les règles standards, les lazy et le askme..
 
 
@@ -31,6 +32,10 @@ Téléchargez le plug-in et suivez la documentation
    
    
 ## Versions
+Version 1.2 - 26/09/2015
+- Ajout du réajustement automatique du niveau du micro (2 propriétés: set_micro et level_micro).
+- Utile si une application positionne automatiquement le niveau du micro et créait des problèmes de compréhension.
+
 Version 1.1 - 30/07/2015
 - Ajout d'une règle 'stop le mode silence' pour arrêter la remise automatique du mode silence (Pour le plugin 'scenariz')
 - Meilleur contrôle des plugins et règles à ignorer.
