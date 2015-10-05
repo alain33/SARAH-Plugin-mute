@@ -33,7 +33,13 @@ exports.init = function(sarah){
 			console.log("info: tempo trigger " + config.modules.mute['asknext']);
 			mngSound(true);
 			volmute = true;
-			setjob(config.modules.mute['asknext']);
+			setjob(config.modules.mute['asknext'],null,config.modules.mute['increasedThreashold']);
+		}
+		if (data.key == 'lazyStop') {
+			volmute = false;
+			v_mute = true;
+			speaktobirds = 0;
+			setjob(config.modules.mute['tempo'],null,config.modules.mute['increasedThreashold']);
 		}
   });
 
@@ -75,8 +81,8 @@ exports.action = function(data, callback, config, SARAH){
 // state true = coupe le son
 // state false = remet le son
 var mngSound = function (state) {
-	// SARAH.call('freebox', {command: 'autoMute', key: state});
-	// SARAH.call('SonosPlayer', {command: 'autoMute', key: state});
+	//SARAH.call('freebox', {command: 'autoMute', key: state});
+	//SARAH.call('SonosPlayer', {command: 'autoMute', key: state});
 }
 
 
@@ -85,6 +91,7 @@ var resetVolume = function () {
 	var config = SARAH.ConfigManager.getConfig();
 	if (config.modules.mute['set_micro'] == 'true') {
 		var value = config.modules.mute['level_micro'].toString();
+		value = 59000;
 		var process = '%CD%/plugins/mute/lib/nircmd/nircmd.exe setsysvolume ' + value + ' "default_record"';
 		exec(process, function (error, stdout, stderr) {
 			if (error || stderr) 
@@ -275,7 +282,7 @@ var setjob = function (tempo,value,increasedThreashold) {
 	}
 	job = new CronJob(d, function(done) {	
 		console.log("info: speaktobirds: " + speaktobirds + ' maximum: ' + increasedThreashold)
-		if (value.Options['command'] && value.Options['command'] == 'defaultcontext' && speaktobirds  >= increasedThreashold) {	
+		if (value && value.Options['command'] && value.Options['command'] == 'defaultcontext' && speaktobirds  >= increasedThreashold) {	
 			update_threashold(null,null,function() {  
 				setTimeout(function(){ 
 					setlazymute();

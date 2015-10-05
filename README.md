@@ -32,6 +32,9 @@ Téléchargez le plug-in et suivez la documentation
    
    
 ## Versions
+Version 1.3 - 01/10/2015
+- Ajout d'un trigger "lazyStop" pour le plugin freebox
+
 Version 1.2 - 26/09/2015
 - Ajout du réajustement automatique du niveau du micro (2 propriétés: set_micro et level_micro).
 - Utile si une application positionne automatiquement le niveau du micro et créait des problèmes de compréhension.
