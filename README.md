@@ -37,7 +37,7 @@ Version 1.3 - 01/10/2015
 
 Version 1.2 - 26/09/2015
 - Ajout du réajustement automatique du niveau du micro (2 propriétés: set_micro et level_micro).
-- Utile si une application positionne automatiquement le niveau du micro et créait des problèmes de compréhension.
+- Utile si une application positionne automatiquement le niveau du micro et crée des problèmes de compréhension.
 
 Version 1.1 - 30/07/2015
 - Ajout d'une règle 'stop le mode silence' pour arrêter la remise automatique du mode silence (Pour le plugin 'scenariz')

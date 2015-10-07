@@ -91,7 +91,6 @@ var resetVolume = function () {
 	var config = SARAH.ConfigManager.getConfig();
 	if (config.modules.mute['set_micro'] == 'true') {
 		var value = config.modules.mute['level_micro'].toString();
-		value = 59000;
 		var process = '%CD%/plugins/mute/lib/nircmd/nircmd.exe setsysvolume ' + value + ' "default_record"';
 		exec(process, function (error, stdout, stderr) {
 			if (error || stderr) 
