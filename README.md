@@ -32,6 +32,10 @@ Téléchargez le plug-in et suivez la documentation
    
    
 ## Versions
+Version 1.4 - 07/10/2015
+- Suppression des actions de mute dans la propriété "ignoreCmds" du fichier mute.prop
+- une valeur de tests en dur supprimée.
+
 Version 1.3 - 01/10/2015
 - Ajout d'un trigger "lazyStop" pour le plugin freebox
 

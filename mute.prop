@@ -2,7 +2,7 @@
   "modules" : { 
     "mute":     {
       "description": "Mute Sarah",
-      "version"    : "1.3",
+      "version"    : "1.4",
 	  "level_micro" : 59000,
 	  "set_micro" : "false",
 	  "increasedThreashold" : 2,
@@ -12,8 +12,7 @@
 	  "askend" : 5,
 	  "tempo" : 10,
 	  "forceMute" : 1,
-	  "ignoreCmds" : {"mute" : "setDefaultThreashold,setmaxThreashold,getThreashold,updateThreashold",
-					  "ALL" : "setRoom",
+	  "ignoreCmds" : {"ALL" : "setRoom",
 					  "eeDomus" : "motionAlarm,autoSwitchOff",
 					  "freebox" : "autoMute,null",
 					  "SonosPlayer" : "autoMute,null"
